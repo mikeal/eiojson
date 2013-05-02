@@ -1,0 +1,27 @@
+{
+  "name": "eiojson",
+  "version": "0.0.0",
+  "description": "Wrapper around engine.io to send and receive JSON objects.",
+  "main": "index.js",
+  "dependencies": {
+    "broquire": "~0.3.0",
+    "engine.io": "~0.5.0",
+    "engine.io-client": "~0.5.0",
+    "lodash": "~1.2.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "node test.js",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mikeal/eiojson"
+  },
+  "keywords": [
+    "engine.io",
+    "json"
+  ],
+  "author": "Mikeal Rogers",
+  "license": "BSD"
+}
