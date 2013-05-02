@@ -1,6 +1,6 @@
 {
   "name": "eiojson",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Wrapper around engine.io to send and receive JSON objects.",
   "main": "index.js",
   "dependencies": {
