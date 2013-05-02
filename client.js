@@ -1,19 +1,6 @@
-var broquire = require('broquire')(require)
-  , client = broquire('engine.io-client', 'eio')
-  , _ = require('lodash')
-  , events = require('events')
-  ;
+var saferStringify = require('./').saferStringify
 
-
-// Deep copy objects before stringifying
-// - removes circular references
-function saferStringify (obj) {
-  return JSON.stringify(_.clone(obj, true))
-}
-
-module.exports = function () {
-  var stream = client.apply(client, arguments)
-
+function binder (stream) {
   stream.on('data', function (data) {
     var obj
     try { JSON.parse(data.toString) }
@@ -25,3 +12,5 @@ module.exports = function () {
   }
   return stream
 }
+
+module.exports = binder

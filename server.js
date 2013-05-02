@@ -1,12 +1,7 @@
-var engine = require('engine.io')
-  , _ = require('lodash')
-  , wrap = require('./').wrap
+var _ = require('lodash')
+  , saferStringify = require('./').saferStringify
   ;
-
-function saferStringify (obj) {
-  return JSON.stringify(_.clone(obj, true))
-}
-
+  
 function binder (server) {
   server.on('connection', function (socket) {
     socket.on('message', function (data) {
@@ -22,10 +17,7 @@ function binder (server) {
   return server
 }
 
-wrap(engine, 'listen', binder)
-wrap(engine, 'attach', binder)
-
-module.exports = engine
+module.exports = binder
 
 
 
