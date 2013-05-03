@@ -3,7 +3,7 @@ var saferStringify = require('./').saferStringify
 function binder (stream) {
   stream.on('data', function (data) {
     var obj
-    try { JSON.parse(data.toString) }
+    try { obj = JSON.parse(data.toString) }
     catch (e) { stream.emit('error', e); return}
     stream.emit('json', obj)
   })
