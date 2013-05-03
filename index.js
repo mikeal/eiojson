@@ -1,8 +1,18 @@
 var broquire = require('broquire')(require)
   , eioclient = broquire('engine.io-client', 'eio')
   , _ = require('lodash')
-  , engine = _.clone(broquire('engine.io', {}))
+  , engine = broquire('engine.io', {})
   ;
+
+function cloneEngine (fn) {
+  // engine.io sets __proto__ so we can't use .apply()
+  // we'll just have to cross our fingers that they don't add any more args
+  var ret = function (str, opts) {return fn(str, opts)}
+  for (var i in fn) {
+    if (i) ret[i] = fn[i]
+  }
+  return ret
+}
 
 function wrap (obj, name, fn) {
   var old = obj[name]
@@ -50,6 +60,7 @@ function bindServer (server) {
 }
 
 if (engine.listen) {
+  engine = cloneEngine(engine)
   wrap(engine, 'listen', bindServer)
   wrap(engine, 'attach', bindServer)
 }
