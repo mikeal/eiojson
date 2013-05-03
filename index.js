@@ -27,8 +27,10 @@ function createWrite (stream) {
 }
 
 function binder (stream) {
-  stream.on('data', createListener(stream))
-  stream.json = createWrite(stream)
+  if (!stream.json) {
+    stream.on('data', createListener(stream))
+    stream.json = createWrite(stream)
+  }
   return stream
 }
 
