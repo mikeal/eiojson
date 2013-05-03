@@ -1,24 +1,4 @@
-var broquire = require('broquire')(require)
-  , eioclient = broquire('engine.io-client', 'eio')
-  , _ = require('lodash')
-  , engine = broquire('engine.io', {})
-  ;
-
-function cloneEngine (fn) {
-  // engine.io sets __proto__ so we can't use .apply()
-  // we'll just have to cross our fingers that they don't add any more args
-  var ret = function (str, opts) {return fn(str, opts)}
-  for (var i in fn) {
-    if (i) ret[i] = fn[i]
-  }
-  return ret
-}
-
-function wrap (obj, name, fn) {
-  var old = obj[name]
-  obj[name] = function () {return fn(old.apply(obj, arguments))}
-}
-exports.wrap = wrap
+var _ = require('lodash')
 
 // Deep copy objects before stringifying
 // - removes circular references
@@ -52,25 +32,4 @@ function binder (stream) {
   return stream
 }
 
-function bindServer (server) {
-  server.on('connection', function (socket) {
-    binder(socket)
-  })
-  return server
-}
-
-if (engine.listen) {
-  engine = cloneEngine(engine)
-  wrap(engine, 'listen', bindServer)
-  wrap(engine, 'attach', bindServer)
-}
-
-exports.server = engine
-
-exports.client = function () {
-  return binder(eioclient.apply(eioclient, arguments))
-}
-
-exports.binder = binder
-exports.bindClient = binder
-exports.bindServer = bindServer
+module.exports = binder

@@ -3,6 +3,8 @@ var eiojson = require('./index')
   , assert = require('assert')
   , _ = require('lodash')
   , ok = require('okdone')
+  , engine = require('engine.io')
+  , client = require('engine.io-client')
   ;
 
 var d = cleanup(function (error) {
@@ -42,13 +44,14 @@ function test (c) {
   })
 }
 
-var s = eiojson.server.listen(8080, function () {
-  var c = eiojson.client('ws://localhost:8080')
+var s = engine.listen(8080, function () {
+  var c = eiojson(client('ws://localhost:8080'))
   c.on('json', listener)
   test(c)
 })
 
 s.on('connection', function (socket) {
+  eiojson(socket)
   socket.on('json', listener)
   test(socket)
 })
