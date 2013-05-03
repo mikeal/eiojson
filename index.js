@@ -1,7 +1,7 @@
 var broquire = require('broquire')(require)
   , eioclient = broquire('engine.io-client', 'eio')
-  , engine = broquire('engine.io', {})
   , _ = require('lodash')
+  , engine = _.clone(broquire('engine.io', {}))
   ;
 
 function wrap (obj, name, fn) {
