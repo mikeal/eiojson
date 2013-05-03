@@ -40,7 +40,6 @@ function test (c) {
   _.each(types, function (t) {
     c.json(t)
   })
-  // assert.deepEqual and _.clone treat circular refs differently
 }
 
 var s = eiojson.server.listen(8080, function () {

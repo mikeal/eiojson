@@ -21,7 +21,11 @@ function createListener (stream) {
   function listener (data) {
     var obj
     try { obj = JSON.parse(data.toString()) }
-    catch (e) { stream.emit('error', e); return}
+    catch (e) {
+      // Userful for debugging but can't throw on uncaught.
+      // stream.emit('error', e)
+      return
+    }
     stream.emit('json', obj)
     return data
   }
