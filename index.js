@@ -17,10 +17,33 @@ function saferStringify (obj) {
 }
 exports.saferStringify = saferStringify
 
+function createListener (stream) {
+  function listener (data) {
+    var obj
+    try { obj = JSON.parse(data.toString()) }
+    catch (e) { stream.emit('error', e); return}
+    stream.emit('json', obj)
+    return data
+  }
+  return listener
+}
 
-var bindServer = require('./server')
-  , bindClient = require('./client')
-  ;
+function createWrite (stream) {
+  return function (obj) { return stream.send(saferStringify(obj)) }
+}
+
+function binder (stream) {
+  stream.on('data', createListener(stream))
+  stream.json = createWrite(stream)
+  return stream
+}
+
+function bindServer (server) {
+  server.on('connection', function (socket) {
+    binder(socket)
+  })
+  return server
+}
 
 if (engine.listen) {
   wrap(engine, 'listen', bindServer)
@@ -30,8 +53,9 @@ if (engine.listen) {
 exports.server = engine
 
 exports.client = function () {
-  return bindClient(eioclient.apply(eioclient, arguments))
+  return binder(eioclient.apply(eioclient, arguments))
 }
 
-exports.bindClient = bindClient
+exports.binder = binder
+exports.bindClient = binder
 exports.bindServer = bindServer

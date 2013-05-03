@@ -45,13 +45,11 @@ function test (c) {
 
 var s = eiojson.server.listen(8080, function () {
   var c = eiojson.client('ws://localhost:8080')
-
   c.on('json', listener)
   test(c)
 })
 
 s.on('connection', function (socket) {
-
   socket.on('json', listener)
   test(socket)
 })
